@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,49 +46,53 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<UserRole> userRoles = new HashSet<>();
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Account account;
 	
-	
-	
+	public User(String firstName, String lastName , String username, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
+		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return username;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return enabled;
 	}
 
 }
