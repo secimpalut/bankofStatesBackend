@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class TransactionResponse {
-
 	boolean isSuccess;
 	String message;
-	UserDAO userDAO;
+	UserDAO user;
 }
