@@ -1,6 +1,7 @@
 package com.bank.util;
 
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +50,11 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
 
+    	Calendar issuedCalendar = Calendar.getInstance();
+		Calendar expiredCalendar = Calendar.getInstance();
+		expiredCalendar.setTime(issuedCalendar.getTime());
+		expiredCalendar.add(Calendar.HOUR, 2);
+		
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
